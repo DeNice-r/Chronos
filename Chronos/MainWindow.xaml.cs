@@ -29,25 +29,44 @@ namespace Chronos
         private DateTime currentTimerTime;
         private DateTime currentStopwatchTime;
         private DateTime timerStart;
-        private TimeSpan timerEnd;
         private DateTime stopwatchStart;
+        private TimeSpan timerOffset = new TimeSpan(0);
         private TimeSpan stopwatchOffset = new TimeSpan(0);
+        private TimeSpan timerEnd;
 
         private List<DateTime> notedTimeStamps = new List<DateTime>();
+
+        // TODO: start/pause on timer breaks it
 
         public MainWindow()
         {
             InitializeComponent();
-            timeDisplayTimer = new System.Windows.Threading.DispatcherTimer();
-            timerDisplayTimer = new System.Windows.Threading.DispatcherTimer();
-            stopwatchDisplayTimer = new System.Windows.Threading.DispatcherTimer();
-            timeDisplayTimer.Tick += new EventHandler(timeDisplayTimer_Tick);
-            timerDisplayTimer.Tick += new EventHandler(timerDisplayTimer_Tick);
-            stopwatchDisplayTimer.Tick += new EventHandler(stopwatchDisplayTimer_Tick);
-            timeDisplayTimer.Interval = new TimeSpan(1000);
-            timerDisplayTimer.Interval = new TimeSpan(100);
-            stopwatchDisplayTimer.Interval = new TimeSpan(100);
-            timeDisplayTimer.Start();
+            if (!SetupTimers())
+            {
+                Environment.Exit(1001);
+            }
+        }
+
+        private bool SetupTimers()
+        {
+            try
+            {
+                timeDisplayTimer = new System.Windows.Threading.DispatcherTimer();
+                timerDisplayTimer = new System.Windows.Threading.DispatcherTimer();
+                stopwatchDisplayTimer = new System.Windows.Threading.DispatcherTimer();
+                timeDisplayTimer.Tick += new EventHandler(timeDisplayTimer_Tick);
+                timerDisplayTimer.Tick += new EventHandler(timerDisplayTimer_Tick);
+                stopwatchDisplayTimer.Tick += new EventHandler(stopwatchDisplayTimer_Tick);
+                timeDisplayTimer.Interval = new TimeSpan(1000);
+                timerDisplayTimer.Interval = new TimeSpan(100);
+                stopwatchDisplayTimer.Interval = new TimeSpan(100);
+                timeDisplayTimer.Start();
+            }
+            catch (Exception e) {
+                MessageBox.Show(e.Message + "\nStopping...");
+                return false;
+            }
+            return true;
         }
 
         private void timeDisplayTimer_Tick(object sender, EventArgs e)
@@ -67,17 +86,18 @@ namespace Chronos
         private void timerDisplayTimer_Tick(object sender, EventArgs e)
         {
             // Updating the Label which displays the current second
-            DateTime d = DateTime.Now;
-            //if (d.TotalMilliseconds <= 0)
-            //{
-            //    stopwatchDisplayTimer.Stop();
-            //    stopwatchStart = new DateTime(0);
-            //    d = new TimeSpan(0);
-            //}
-            currentTimerTime = d;
-            timerDisplayHH.Text = d.ToString("HH");
-            timerDisplaymm.Text = d.ToString("mm");
-            timerDisplayss.Text = d.ToString("ss");
+            TimeSpan d = timerEnd - (DateTime.Now - timerStart + timerOffset);
+            if (new TimeSpan(0) <= d)
+            {
+                currentTimerTime = new DateTime(0) + d;
+                timerDisplayhh.Text = d.ToString(@"hh");
+                timerDisplaymm.Text = d.ToString(@"mm");
+                timerDisplayss.Text = d.ToString(@"ss");
+            }
+            else
+            {
+                stopTimer();
+            }
 
             // Forcing the CommandManager to raise the RequerySuggested event
             CommandManager.InvalidateRequerySuggested();
@@ -85,9 +105,11 @@ namespace Chronos
 
         private void stopwatchDisplayTimer_Tick(object sender, EventArgs e)
         {
-            // Updating the Label which displays the current second
+            // Calculate time ticked (Now - when the stopwatch started + time on pause)
             TimeSpan d = DateTime.Now - stopwatchStart + stopwatchOffset;
+            // Convert timespan to datetime
             currentStopwatchTime = new DateTime(0) + d;
+            // Show new data
             stopwatchDisplayHH.Content = d.ToString(@"hh");
             stopwatchDisplaymm.Content = d.ToString(@"mm");
             stopwatchDisplayss.Content = d.ToString(@"ss");
@@ -98,16 +120,7 @@ namespace Chronos
 
         private void startTimerButton_Click(object sender, RoutedEventArgs e)
         {
-            if (timerDisplayTimer.IsEnabled)
-            {
-                timerDisplayTimer.Stop();
-                startTimerButton.Content = "▶";
-            }
-            else
-            {
-                timerDisplayTimer.Start();
-                startTimerButton.Content = "❚❚";
-            }
+            startTimer();
         }
 
         private void startStopwatchButton_Click(object sender, RoutedEventArgs e)
@@ -116,7 +129,7 @@ namespace Chronos
             if (stopwatchDisplayTimer.IsEnabled)
             {
                 stopwatchDisplayTimer.Stop();
-                stopwatchOffset = DateTime.Now - stopwatchStart + stopwatchOffset;
+                stopwatchOffset = DateTime.Now - stopwatchStart + stopwatchOffset; // += maybe?
                 startStopwatchButton.Content = "▶";
             }
             else
@@ -129,12 +142,7 @@ namespace Chronos
 
         private void stopTimerButton_Click(object sender, RoutedEventArgs e)
         {
-            timerDisplayTimer.Stop();
-            startTimerButton.Content = "▶";
-            timerStart = new DateTime(0);
-            timerDisplayHH.Text = "00";
-            timerDisplaymm.Text = "00";
-            timerDisplayss.Text = "00";
+            stopTimer();
         }
 
         private void stopStopwatchButton_Click(object sender, RoutedEventArgs e)
@@ -161,6 +169,52 @@ namespace Chronos
         private void notateStopwatchButton_Click(object sender, RoutedEventArgs e)
         {
             notedTimeStamps.Add(currentStopwatchTime);
+        }
+
+        private void timerDisplay_GotFocus(object sender, RoutedEventArgs e)
+        {
+            //if (currentTimerTime != new DateTime(0))
+            //    timerDisplayTimer.Stop();
+        }
+
+        private void timerDisplay_LostFocus(object sender, RoutedEventArgs e)
+        {
+            //if(currentTimerTime != new DateTime(0))
+            //    timerDisplayTimer.Start();
+        }
+
+        private void startTimer()
+        {
+            if (timerDisplayTimer.IsEnabled)
+            {
+                timerDisplayTimer.Stop();
+                timerOffset = DateTime.Now - timerStart + timerOffset; // += maybe?
+                startTimerButton.Content = "▶";
+            }
+            else
+            {
+                timerEnd = getTimerEnd();
+                timerStart = DateTime.Now;
+                timerDisplayTimer.Start();
+                startTimerButton.Content = "❚❚";
+            }
+        }
+
+        private void stopTimer()
+        {
+            timerDisplayTimer.Stop();
+            startTimerButton.Content = "▶";
+            timerStart = new DateTime(0);
+            timerOffset = new TimeSpan(0);
+            timerEnd = new TimeSpan(0);
+            timerDisplayhh.Text = "00";
+            timerDisplaymm.Text = "00";
+            timerDisplayss.Text = "00";
+        }
+
+        private TimeSpan getTimerEnd()
+        {
+            return TimeSpan.FromSeconds(Convert.ToInt32(timerDisplayss.Text) + Convert.ToInt32(timerDisplaymm.Text) * 60 + Convert.ToInt32(timerDisplayhh.Text) * 3600);
         }
 
         // ❚❚

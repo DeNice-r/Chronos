@@ -5,13 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Chronos"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" ResizeMode="CanMinimize">
+        Title="MainWindow" Height="300" Width="800" ResizeMode="CanMinimize"> <!--default 450-->
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="2*"/>
+            <!--<RowDefinition Height="2*"/>-->
         </Grid.RowDefinitions>
         <Border BorderThickness="0,0,0,1.5" BorderBrush="LightGray" Grid.Row="0"/>
         <Label FontFamily="/Fonts/#Baloo Chettan 2" FontSize="30" Content="System time" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,0,0"/>
@@ -20,18 +20,18 @@
         <Label FontFamily="/Fonts/#Baloo Chettan 2" FontSize="50" x:Name="timeDisplaymm" Content="00" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Row="0"/>
         <Label FontFamily="/Fonts/#Baloo Chettan 2" FontSize="50" Content=":" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="72.5,-7,0,0"/>
         <Label FontFamily="/Fonts/#Baloo Chettan 2" FontSize="50" x:Name="timeDisplayss" Content="00" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Row="0" Margin="140,0,0,0"/>
-        <Button x:Name="notateTimeButton" Content="📋" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,20,0" Width="50" Height="50" Background="{x:Null}" BorderBrush="LightGray" Grid.Row="0" Click="notateTimeButton_Click"/>
+        <Button x:Name="notateTimeButton" Content="📋" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,20,0" Width="50" Height="50" Background="{x:Null}" BorderBrush="LightGray" Grid.Row="0" Click="notateTimeButton_Click" TabIndex="101"/>
 
         <Border BorderThickness="0,0,0,1.5" BorderBrush="LightGray" Grid.Row="1"/>
         <Label FontFamily="/Fonts/#Baloo Chettan 2" FontSize="30" Content="Timer" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,0,0"/>
-        <TextBox FontFamily="/Fonts/#Baloo Chettan 2" FontSize="50" x:Name="timerDisplayHH" Text="00" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Row="1" Margin="0,0,140,0" Background="{x:Null}" BorderBrush="{x:Null}"/>
+        <TextBox FontFamily="/Fonts/#Baloo Chettan 2" GotFocus="timerDisplay_GotFocus" LostFocus="timerDisplay_LostFocus" FontSize="50" x:Name="timerDisplayhh" Text="00" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Row="1" Margin="0,0,140,0" Background="{x:Null}" BorderBrush="{x:Null}" TabIndex="201"/>
         <Label FontFamily="/Fonts/#Baloo Chettan 2" FontSize="50" Content=":" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-7,72.5,0"/>
-        <TextBox FontFamily="/Fonts/#Baloo Chettan 2" FontSize="50" x:Name="timerDisplaymm" Text="00" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Row="1" Background="{x:Null}" BorderBrush="{x:Null}"/>
+        <TextBox FontFamily="/Fonts/#Baloo Chettan 2" GotFocus="timerDisplay_GotFocus" LostFocus="timerDisplay_LostFocus" FontSize="50" x:Name="timerDisplaymm" Text="00" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Row="1" Background="{x:Null}" BorderBrush="{x:Null}"  TabIndex="202"/>
         <Label FontFamily="/Fonts/#Baloo Chettan 2" FontSize="50" Content=":" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="72.5,-7,0,0"/>
-        <TextBox FontFamily="/Fonts/#Baloo Chettan 2" FontSize="50" x:Name="timerDisplayss" Text="00" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Row="1" Margin="140,0,0,0" Background="{x:Null}" BorderBrush="{x:Null}"/>
-        <Button x:Name="startTimerButton" Content="▶" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,120,0" Width="50" Height="50" Background="{x:Null}" BorderBrush="LightGray" Grid.Row="1" BorderThickness="1,1,0,1" Click="startTimerButton_Click"/>
-        <Button x:Name="stopTimerButton" Content="⬛" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,70,0" Width="50" Height="50" Background="{x:Null}" BorderBrush="LightGray" Grid.Row="1" BorderThickness="1,1,1,1" Click="stopTimerButton_Click"/>
-        <Button x:Name="notateTimerButton" Content="📋" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,20,0" Width="50" Height="50" Background="{x:Null}" BorderBrush="LightGray" Grid.Row="1"  BorderThickness="0,1,1,1" Click="notateTimerButton_Click"/>
+        <TextBox FontFamily="/Fonts/#Baloo Chettan 2" GotFocus="timerDisplay_GotFocus" LostFocus="timerDisplay_LostFocus" FontSize="50" x:Name="timerDisplayss" Text="00" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Row="1" Margin="140,0,0,0" Background="{x:Null}" BorderBrush="{x:Null}"  TabIndex="203"/>
+        <Button x:Name="startTimerButton" Content="▶" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,120,0" Width="50" Height="50" Background="{x:Null}" BorderBrush="LightGray" Grid.Row="1" BorderThickness="1,1,0,1" Click="startTimerButton_Click" TabIndex="204"/>
+        <Button x:Name="stopTimerButton" Content="⬛" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,70,0" Width="50" Height="50" Background="{x:Null}" BorderBrush="LightGray" Grid.Row="1" BorderThickness="1,1,1,1" Click="stopTimerButton_Click" TabIndex="205"/>
+        <Button x:Name="notateTimerButton" Content="📋" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,20,0" Width="50" Height="50" Background="{x:Null}" BorderBrush="LightGray" Grid.Row="1"  BorderThickness="0,1,1,1" Click="notateTimerButton_Click" TabIndex="206"/>
 
         <Border BorderThickness="0,0,0,1.5" BorderBrush="LightGray" Grid.Row="2"/>
         <Label FontFamily="/Fonts/#Baloo Chettan 2" FontSize="30" Content="Stopwatch" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,0,0"/>
@@ -40,10 +40,10 @@
         <Label FontFamily="/Fonts/#Baloo Chettan 2" FontSize="50" x:Name="stopwatchDisplaymm" Content="00" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Row="2"/>
         <Label FontFamily="/Fonts/#Baloo Chettan 2" FontSize="50" Content=":" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="72.5,-7,0,0"/>
         <Label FontFamily="/Fonts/#Baloo Chettan 2" FontSize="50" x:Name="stopwatchDisplayss" Content="00" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Row="2" Margin="140,0,0,0"/>
-        <Button x:Name="startStopwatchButton" Content="▶" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,120,0" Width="50" Height="50" Background="{x:Null}" BorderBrush="LightGray" Grid.Row="2" BorderThickness="1,1,0,1" Click="startStopwatchButton_Click"/>
-        <Button x:Name="stopStopwatchButton" Content="⬛" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,70,0" Width="50" Height="50" Background="{x:Null}" BorderBrush="LightGray" Grid.Row="2" BorderThickness="1,1,1,1" Click="stopStopwatchButton_Click"/>
-        <Button x:Name="notateStopwatchButton" Content="📋" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,20,0" Width="50" Height="50" Background="{x:Null}" BorderBrush="LightGray" Grid.Row="2"  BorderThickness="0,1,1,1" Click="notateStopwatchButton_Click"/>
+        <Button x:Name="startStopwatchButton" Content="▶" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,120,0" Width="50" Height="50" Background="{x:Null}" BorderBrush="LightGray" Grid.Row="2" BorderThickness="1,1,0,1" Click="startStopwatchButton_Click" TabIndex="301"/>
+        <Button x:Name="stopStopwatchButton" Content="⬛" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,70,0" Width="50" Height="50" Background="{x:Null}" BorderBrush="LightGray" Grid.Row="2" BorderThickness="1,1,1,1" Click="stopStopwatchButton_Click" TabIndex="302"/>
+        <Button x:Name="notateStopwatchButton" Content="📋" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,20,0" Width="50" Height="50" Background="{x:Null}" BorderBrush="LightGray" Grid.Row="2"  BorderThickness="0,1,1,1" Click="notateStopwatchButton_Click" TabIndex="303"/>
 
-        <Label Content="Work in progress" Grid.Row="3" FontFamily="/Fonts/#Baloo Chettan 2" FontSize="80" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Label Visibility="Hidden" x:Name="WIPbar" Content="Work in progress" Grid.Row="3" FontFamily="/Fonts/#Baloo Chettan 2" FontSize="80" HorizontalAlignment="Center" VerticalAlignment="Center"/>
     </Grid>
 </Window>
