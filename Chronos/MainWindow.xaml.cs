@@ -1,17 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Media;
 using System.Windows.Threading;
 
 namespace Chronos
@@ -33,6 +23,7 @@ namespace Chronos
         private TimeSpan timerOffset = new TimeSpan(0);
         private TimeSpan stopwatchOffset = new TimeSpan(0);
         private TimeSpan timerEnd;
+        SoundPlayer notifyPlayer = new SoundPlayer("Sounds/notification.wav");
 
         private List<DateTime> notedTimeStamps = new List<DateTime>();
 
@@ -45,21 +36,22 @@ namespace Chronos
             {
                 Environment.Exit(1001);
             }
+            notifyPlayer.LoadAsync();
         }
 
         private bool SetupTimers()
         {
             try
             {
-                timeDisplayTimer = new System.Windows.Threading.DispatcherTimer();
-                timerDisplayTimer = new System.Windows.Threading.DispatcherTimer();
-                stopwatchDisplayTimer = new System.Windows.Threading.DispatcherTimer();
-                timeDisplayTimer.Tick += new EventHandler(timeDisplayTimer_Tick);
-                timerDisplayTimer.Tick += new EventHandler(timerDisplayTimer_Tick);
+                timeDisplayTimer =      new DispatcherTimer();
+                timerDisplayTimer =     new DispatcherTimer();
+                stopwatchDisplayTimer = new DispatcherTimer();
+                timeDisplayTimer.Tick +=      new EventHandler(timeDisplayTimer_Tick);
+                timerDisplayTimer.Tick +=     new EventHandler(timerDisplayTimer_Tick);
                 stopwatchDisplayTimer.Tick += new EventHandler(stopwatchDisplayTimer_Tick);
-                timeDisplayTimer.Interval = new TimeSpan(1000);
-                timerDisplayTimer.Interval = new TimeSpan(100);
-                stopwatchDisplayTimer.Interval = new TimeSpan(100);
+                timeDisplayTimer.Interval =      new TimeSpan(1000000);
+                timerDisplayTimer.Interval =     new TimeSpan(500000);
+                stopwatchDisplayTimer.Interval = new TimeSpan(500000);
                 timeDisplayTimer.Start();
             }
             catch (Exception e) {
@@ -79,8 +71,6 @@ namespace Chronos
             timeDisplaymm.Content = d.ToString("mm");
             timeDisplayss.Content = d.ToString("ss");
 
-            // Forcing the CommandManager to raise the RequerySuggested event
-            CommandManager.InvalidateRequerySuggested();
         }
 
         private void timerDisplayTimer_Tick(object sender, EventArgs e)
@@ -96,11 +86,10 @@ namespace Chronos
             }
             else
             {
+                notifyPlayer.Play();
                 stopTimer();
             }
 
-            // Forcing the CommandManager to raise the RequerySuggested event
-            CommandManager.InvalidateRequerySuggested();
         }
 
         private void stopwatchDisplayTimer_Tick(object sender, EventArgs e)
@@ -114,8 +103,6 @@ namespace Chronos
             stopwatchDisplaymm.Content = d.ToString(@"mm");
             stopwatchDisplayss.Content = d.ToString(@"ss");
 
-            // Forcing the CommandManager to raise the RequerySuggested event
-            CommandManager.InvalidateRequerySuggested();
         }
 
         private void startTimerButton_Click(object sender, RoutedEventArgs e)
